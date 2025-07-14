@@ -1,10 +1,15 @@
 import { Routes, Route } from "react-router-dom"
+import { Toaster } from "react-hot-toast"
 
 const App = () => {
   return (
-    <Routes>
-      
-    </Routes>
+    <div>
+      <Routes>  
+
+      </Routes>
+      <Toaster />
+    </div>
+
   )
 }
 
