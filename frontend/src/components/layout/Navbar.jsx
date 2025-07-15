@@ -1,6 +1,8 @@
 import { ShoppingCart, User, LogIn, LogOut, Lock, Search, UserPlus } from "lucide-react"
 import { Link } from "react-router-dom"
 
+import { useAuth } from "../../context/AuthContext"
+
 const IconWrapper = ({ children, to, onClick }) => (
   <Link
     to={to}
@@ -12,7 +14,8 @@ const IconWrapper = ({ children, to, onClick }) => (
 )
 
 const Navbar = () => {
-  const isAuthenticated = true
+  const { user } = useAuth()
+  const isAuthenticated = !!user
 
   return (
     <header className='fixed top-0 left-0 w-full bg-white shadow-md z-40 border-b border-gray-200'>

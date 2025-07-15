@@ -9,6 +9,7 @@ export const AuthProvider = ({ children }) => {
     const [user, setUser] = useState(null)
     const [isSigningUp, setIsSigningUp] = useState(false)
     const [isLoggingIn, setIsLoggingIn] = useState(false)
+    const [isCheckingAuth, setIsCheckingAuth] = useState(false)
 
     const signup = async (fullName, email, password, confirmPassword) => {
         setIsSigningUp(true)
@@ -41,9 +42,25 @@ export const AuthProvider = ({ children }) => {
             setIsLoggingIn(false)
         }
     }   
+    
+    const checkAuth = async () => {
+        setIsCheckingAuth(true)
+        try {
+            const response = await axiosInstance.get("/auth/check-auth")
+            setUser(response.data.data)
+        }
+        catch(error) {
+            setUser(null)
+            console.error(error)
+            throw error 
+        }
+        finally {
+            setIsCheckingAuth(false)
+        }
+    }
 
     return (
-        <AuthContext.Provider value={{ user, setUser, signup, isSigningUp, login, isLoggingIn }}>
+        <AuthContext.Provider value={{ user, setUser, signup, isSigningUp, login, isLoggingIn, checkAuth, isCheckingAuth }}>
             {children}
         </AuthContext.Provider>
     )
