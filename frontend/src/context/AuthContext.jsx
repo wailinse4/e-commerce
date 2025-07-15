@@ -1,7 +1,6 @@
 import axiosInstance from "../config/axiosInstance.js"
 
 import { createContext, useContext, useState, useEffect } from "react"
-import { toast } from "react-hot-toast"
 
 export const AuthContext = createContext() 
 
@@ -17,12 +16,10 @@ export const AuthProvider = ({ children }) => {
         try {
             const response = await axiosInstance.post("/auth/signup", { fullName, email, password, confirmPassword })
             setUser(response.data.data)
-            toast.success("Signup successful")
         } 
         catch (error) {
             setUser(null)
             console.error(error)
-            toast.error("Signup failed")
             throw error
         } 
         finally {
@@ -35,12 +32,10 @@ export const AuthProvider = ({ children }) => {
         try {
             const response = await axiosInstance.post("/auth/login", { email, password })
             setUser(response.data.data)
-            toast.success("Login successful")
         } 
         catch (error) {
             setUser(null)
             console.error(error)
-            toast.error("Login failed")
             throw error
         } 
         finally {
