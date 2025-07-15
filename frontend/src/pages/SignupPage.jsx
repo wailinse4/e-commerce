@@ -1,8 +1,73 @@
+import { useState } from "react"
+import { Link, useNavigate } from "react-router-dom"
 import { motion } from "framer-motion"
-import { Link } from "react-router-dom"
 import { UserPlus, Mail, Lock, User, ArrowRight } from "lucide-react"
+import { toast } from "react-hot-toast"
+
+
+import { useAuth } from "../context/AuthContext"
 
 const SignUpPage = () => {
+  const [fullName, setFullName] = useState("")
+  const [email, setEmail] = useState("")
+  const [password, setPassword] = useState("")
+  const [confirmPassword, setConfirmPassword] = useState("")
+
+  const handleFullNameChange = (e) => {
+    setFullName(e.target.value)
+  }
+
+  const handleEmailChange = (e) => {
+    setEmail(e.target.value)
+  }
+
+  const handlePasswordChange = (e) => {
+    setPassword(e.target.value)
+  }
+
+  const handleConfirmPasswordChange = (e) => {
+    setConfirmPassword(e.target.value)
+  }
+
+  const { signup, isSigningUp } = useAuth()
+  const navigate = useNavigate()
+
+  const handleSubmit = async (e) => {
+    e.preventDefault()
+    
+    if(!fullName.trim()) {
+      toast.error("Full name is required")
+      return
+    }
+
+    if(!email) {
+      toast.error("Email is required")
+      return
+    }
+    if(!password) {
+      toast.error("Password is required")
+      return
+    }
+
+    if(!confirmPassword) {
+      toast.error("Please confirm your password")
+      return
+    }
+    
+    if(password.length < 6) {
+      toast.error("Password must be at least 6 characters")
+      return
+    }
+    
+    if(password !== confirmPassword) {
+      toast.error("Passwords do not match")
+      return
+    }
+
+    await signup(fullName.trim(), email, password, confirmPassword)
+    navigate('/')
+  }
+
   return (
     <div className="fixed inset-0 overflow-hidden">
       <div className="h-full flex items-center justify-center bg-gray-50 px-4 py-8">
@@ -31,6 +96,7 @@ const SignUpPage = () => {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.2 }}
+            onSubmit={handleSubmit}
           >
             <div>
               <label htmlFor="name" className="block text-sm font-medium text-gray-700">
@@ -42,8 +108,11 @@ const SignUpPage = () => {
                 </div>
                 <input
                   id="name"
+                  name="fullName"
                   type="text"
                   required
+                  value={fullName}
+                  onChange={handleFullNameChange}
                   className="block w-full px-3 py-2 pl-10 bg-white border border-gray-300 rounded-md placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-black focus:border-black sm:text-sm"
                   placeholder="John Doe"
                 />
@@ -60,8 +129,11 @@ const SignUpPage = () => {
                 </div>
                 <input
                   id="email"
+                  name="email"
                   type="email"
                   required
+                  value={email}
+                  onChange={handleEmailChange}
                   className="block w-full px-3 py-2 pl-10 bg-white border border-gray-300 rounded-md placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-black focus:border-black sm:text-sm"
                   placeholder="you@example.com"
                 />
@@ -78,8 +150,11 @@ const SignUpPage = () => {
                 </div>
                 <input
                   id="password"
+                  name="password"
                   type="password"
                   required
+                  value={password}
+                  onChange={handlePasswordChange}
                   className="block w-full px-3 py-2 pl-10 bg-white border border-gray-300 rounded-md placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-black focus:border-black sm:text-sm"
                   placeholder="••••••••"
                 />
@@ -99,21 +174,25 @@ const SignUpPage = () => {
                 </div>
                 <input
                   id="confirmPassword"
+                  name="confirmPassword"
                   type="password"
                   required
+                  value={confirmPassword}
+                  onChange={handleConfirmPasswordChange}
                   className="block w-full px-3 py-2 pl-10 bg-white border border-gray-300 rounded-md placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-black focus:border-black sm:text-sm"
                   placeholder="••••••••"
                 />
               </div>
             </div>
 
-            <button
+            <motion.button
               type="submit"
-              className="w-full flex justify-center py-3 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-black hover:bg-gray-900 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-black transition-colors duration-200"
+              disabled={isSigningUp}
+              className={`w-full flex justify-center py-3 px-4 border border-transparent rounded-full shadow-sm text-sm font-medium text-white bg-black hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-black transition-colors duration-200 ${isSigningUp ? 'opacity-70 cursor-not-allowed' : ''}`}
             >
+              {isSigningUp ? 'Creating Account...' : 'Create Account'}
               <UserPlus className="mr-2 h-5 w-5" aria-hidden="true" />
-              Create Account
-            </button>
+            </motion.button>
           </motion.form>
 
           <p className="mt-8 text-center text-sm text-gray-600">

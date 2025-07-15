@@ -2,6 +2,7 @@ import { Route, Routes } from "react-router-dom"
 import { Toaster } from "react-hot-toast"
 
 import SignupPage from "./pages/SignupPage"
+import HomePage from "./pages/HomePage"
 
 function App() {
   return (
@@ -9,6 +10,7 @@ function App() {
       <div className="relative z-50 pt-20">
         <Routes>
           <Route path="/signup" element={<SignupPage />} />
+          <Route path="/" element={<HomePage />} />
         </Routes>
       </div>
       <Toaster />
