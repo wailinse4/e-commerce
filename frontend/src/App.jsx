@@ -1,5 +1,6 @@
 import { Route, Routes } from "react-router-dom"
 import { Toaster } from "react-hot-toast"
+import { useAuth } from "./context/AuthContext.jsx" 
 
 import Navbar from "./components/layout/Navbar"
 
@@ -8,7 +9,15 @@ import LoginPage from "./pages/LoginPage"
 
 import HomePage from "./pages/HomePage"
 
+
+
 function App() {
+  const { user, isCheckingAuth } = useAuth()
+
+  if (isCheckingAuth && !user) {
+    return <div>Loading...</div>
+  }
+
   return (
     <div className="min-h-screen bg-gray-50 text-gray-900 relative overflow-hidden">
       <div className="relative z-50 pt-20">
