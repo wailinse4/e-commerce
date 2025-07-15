@@ -23,21 +23,9 @@ const LoginPage = () => {
   const handleSubmit = async (e) => {
     e.preventDefault()
     
-    if (!email.trim()) {
-        toast.error("Email is required")
-        return false
-    }
-    if (!email.includes("@")) {
-        toast.error("Email is invalid")
-        return false
-    }
-    if (!password.trim()) {
-        toast.error("Password is required")
-        return false
-    }
-    if (password.length < 6) {
-        toast.error("Password must be at least 6 characters")
-        return false
+    if(!email.trim() || !password.trim()) {
+      toast.error("All fields are required")
+      return false
     }
 
     try {
