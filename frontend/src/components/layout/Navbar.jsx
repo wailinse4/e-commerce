@@ -1,5 +1,6 @@
 import { ShoppingCart, User, LogIn, LogOut, Lock, Search, UserPlus } from "lucide-react"
 import { Link } from "react-router-dom"
+import { toast } from "react-hot-toast"
 
 import { useAuth } from "../../context/AuthContext"
 
@@ -14,8 +15,19 @@ const IconWrapper = ({ children, to, onClick }) => (
 )
 
 const Navbar = () => {
-  const { user } = useAuth()
+  const { user, logout } = useAuth()
   const isAuthenticated = !!user
+
+  const handleLogout = () => {
+    try {
+      logout()
+      toast.success("Logout successful")
+    }
+    catch(error) {
+      console.error(error)
+      toast.error("Logout failed")
+    }
+  }
 
   return (
     <header className='fixed top-0 left-0 w-full bg-white shadow-md z-40 border-b border-gray-200'>
@@ -44,7 +56,7 @@ const Navbar = () => {
                   <Lock size={20} />
                 </IconWrapper>
 
-                <IconWrapper to={"/logout"}>
+                <IconWrapper to={"/logout"} onClick={handleLogout}>
                   <LogOut size={20} />
                 </IconWrapper>
               </>

@@ -10,6 +10,7 @@ export const AuthProvider = ({ children }) => {
     const [isSigningUp, setIsSigningUp] = useState(false)
     const [isLoggingIn, setIsLoggingIn] = useState(false)
     const [isCheckingAuth, setIsCheckingAuth] = useState(true)
+    const [isLoggingOut, setIsLoggingOut] = useState(false)
 
     const signup = async (fullName, email, password, confirmPassword) => {
         setIsSigningUp(true)
@@ -61,9 +62,26 @@ export const AuthProvider = ({ children }) => {
         }
     }
 
+    const logout = async () => {
+        setIsLoggingOut(true)
+        try {
+            await axiosInstance.post("/auth/logout")
+            setUser(null)
+        }
+        catch(error) {
+            console.error("Error in logout context:", error)
+            throw error
+        }
+        finally {
+            setIsLoggingOut(false)
+        }
+    }
+
     useEffect(() => {
         checkAuth()
     }, [])
+
+    
 
     return (
         <AuthContext.Provider value={{ 
@@ -75,7 +93,10 @@ export const AuthProvider = ({ children }) => {
             setIsLoggingIn, 
             login, 
             isCheckingAuth, 
-            setIsCheckingAuth
+            setIsCheckingAuth, 
+            isLoggingOut, 
+            setIsLoggingOut,
+            logout , 
         }}>
             { children }
         </AuthContext.Provider>
