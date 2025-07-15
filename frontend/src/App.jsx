@@ -2,6 +2,9 @@ import { Route, Routes } from "react-router-dom"
 import { Toaster } from "react-hot-toast"
 import { useAuth } from "./context/AuthContext.jsx" 
 
+import ProtectedRoute from "./components/ProtectedRoute"
+import PublicRoute from "./components/PublicRoute"
+
 import Navbar from "./components/layout/Navbar"
 
 import SignupPage from "./pages/SignupPage"
@@ -23,10 +26,10 @@ function App() {
       <div className="relative z-50 pt-20">
         <Navbar />
         <Routes>
-          <Route path="/signup" element={<SignupPage />} />
-          <Route path="/login" element={<LoginPage />} />
+          <Route path="/" element={<ProtectedRoute><HomePage /></ProtectedRoute>} />
 
-          <Route path="/" element={<HomePage />} />
+          <Route path="/signup" element={<PublicRoute><SignupPage /></PublicRoute>} />
+          <Route path="/login" element={<PublicRoute><LoginPage /></PublicRoute>} />
         </Routes>
       </div>
       <Toaster />
