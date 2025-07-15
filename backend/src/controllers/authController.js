@@ -90,7 +90,7 @@ export const checkAuth = async (req, res) => {
         }
 
         res.status(200).json({ success: true, message: "Authentication successful", data: {
-            id: user.id, 
+            userId: user.id, 
             fullName: user.fullName, 
             email: user.email, 
         }})
