@@ -7,9 +7,9 @@ import setCookie from "../utils/setCookie.js"
 
 export const signup = async (req, res) => {
     try {
-        const { fullName, email, password } = req.body 
+        const { fullName, email, password, confirmPassword } = req.body 
 
-        if(!fullName || !email || !password) {
+        if(!fullName || !email || !password || !confirmPassword) {
             return res.status(400).json({ success: false, message: "All fields are required" })
         }
         
