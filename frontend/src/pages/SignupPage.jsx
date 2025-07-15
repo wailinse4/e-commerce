@@ -35,24 +35,10 @@ const SignUpPage = () => {
   const handleSubmit = async (e) => {
     e.preventDefault()
     
-    if(!fullName.trim()) {
-      toast.error("Full name is required")
-      return
-    }
-
-    if(!email) {
-      toast.error("Email is required")
-      return
-    }
-    if(!password) {
-      toast.error("Password is required")
-      return
-    }
-
-    if(!confirmPassword) {
-      toast.error("Please confirm your password")
-      return
-    }
+    if(!fullName.trim() || !email.trim() || !password.trim() || !confirmPassword.trim()) {
+      toast.error("All fields are required")
+      return 
+    }  
     
     if(password.length < 6) {
       toast.error("Password must be at least 6 characters")
