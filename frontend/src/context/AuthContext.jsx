@@ -15,12 +15,10 @@ export const AuthProvider = ({ children }) => {
         try {
             const response = await axiosInstance.post("/auth/signup", { fullName, email, password, confirmPassword })
             setUser(response.data.data)
-            toast.success("Signup successful!")
         }
         catch(error) {
-            // set user null later
             console.log(error)
-            toast.error("Signup failed")
+            throw error
         }
         finally {
             setIsSigningUp(false)
@@ -32,7 +30,6 @@ export const AuthProvider = ({ children }) => {
         try {
             const response = await axiosInstance.post("/auth/login", { email, password })
             setUser(response.data.data)
-            
         }
         catch(error) {
             setUser(null)

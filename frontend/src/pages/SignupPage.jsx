@@ -64,8 +64,16 @@ const SignUpPage = () => {
       return
     }
 
-    await signup(fullName.trim(), email, password, confirmPassword)
-    navigate('/')
+    try {
+      await signup(fullName.trim(), email, password, confirmPassword)
+      toast.success("Signup successful!")
+      navigate('/')
+    }
+    catch(error) {
+      toast.error("Signup failed")
+      console.error(error)
+    }
+    
   }
 
   return (
