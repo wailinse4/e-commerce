@@ -17,6 +17,7 @@ export const AuthProvider = ({ children }) => {
             setUser(response.data.data)
         }
         catch(error) {
+            setUser(null)
             console.log(error)
             throw error
         }
