@@ -96,7 +96,7 @@ export const AuthProvider = ({ children }) => {
 	const forgotPassword = async email => {
 		setIsProcessingForgotPassword(true)
 		try {
-			forgotPasswordService(email)
+			await forgotPasswordService(email)
 		} catch (error) {
 			throw error
 		} finally {
