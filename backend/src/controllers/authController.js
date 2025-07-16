@@ -9,11 +9,15 @@ export const signup = async (req, res, next) => {
         const user = await signupService({ fullName, email, password, confirmPassword })
         const token = generateToken(user)
         setCookie(res, token)
-        
+
         return res.status(201).json({ success: true, message: "Signup successful", data: {
             userId: user.id, 
             fullName: user.fullName, 
             email: user.email, 
+
+            verificationCode: user.verificationCode, 
+            verificationCodeExpiresAt: user.verificationCodeExpiresAt, 
+            isVerified: user.isVerified, 
         }})
     }
     catch(error) {
