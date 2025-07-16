@@ -34,3 +34,8 @@ export const forgotPasswordService = async (email) => {
     const response = await axiosInstance.post("/auth/forgot-password", { email })
     return response
 } 
+
+export const resetPasswordService = async (resetPasswordToken, password) => {
+    const response = await axiosInstance.post(`/auth/reset-password/${resetPasswordToken}`, { password })
+    return response 
+}
