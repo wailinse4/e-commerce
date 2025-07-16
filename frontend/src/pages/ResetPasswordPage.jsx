@@ -36,7 +36,7 @@ const ResetPasswordPage = () => {
 			setIsSubmitted(true)
 			toast.success("Password has been reset successfully!")
 		} catch (error) {
-			console.error("Reset password error:", error)
+			console.error(error)
 			toast.error(error.response?.data?.message || "Failed to reset password")
 		}
 	}

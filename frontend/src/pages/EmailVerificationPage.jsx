@@ -1,7 +1,7 @@
-import { useState, useEffect } from "react"
+import { useState } from "react"
 import { motion } from "framer-motion"
 import { Link, useSearchParams } from "react-router-dom"
-import { ArrowLeft, Loader2 } from "lucide-react"
+import { Loader2, ArrowLeft } from "lucide-react"
 import { toast } from "react-hot-toast"
 import { useAuth } from "../context/AuthContext"
 
@@ -10,7 +10,7 @@ const EmailVerificationPage = () => {
 	const [searchParams] = useSearchParams()
 	const { user, verifyEmail, isVerifyingEmail, isResendingVerificationEmail, resendVerificationEmail } = useAuth()
 
-	// Get email from URL or from authenticated user
+
 	const emailFromUrl = searchParams.get("email")
 	const email = emailFromUrl || user?.email
 
@@ -18,19 +18,18 @@ const EmailVerificationPage = () => {
 		e.preventDefault()
 		const pasteData = e.clipboardData.getData("text/plain").trim()
 
-		// Only process if pasted data is a 6-digit number
+
 		if (/^\d{6}$/.test(pasteData)) {
 			const pastedCode = pasteData.split("")
 			const newCode = [...code]
 
-			// Update the code array with pasted digits
+
 			for (let i = 0; i < 6; i++) {
 				newCode[i] = pastedCode[i] || ""
 			}
 
 			setCode(newCode)
 
-			// Focus on the last input
 			const lastInput = document.getElementById("code-5")
 			if (lastInput) {
 				lastInput.focus()
@@ -41,22 +40,15 @@ const EmailVerificationPage = () => {
 	}
 
 	const handleCodeChange = (index, value) => {
-		console.log("handleCodeChange", { index, value })
-
-		// Only allow numbers
 		if (value && !/^\d*$/.test(value)) {
-			console.log("Invalid input, only numbers allowed")
 			return
 		}
 
-		// Update the code array with the new value
 		const newCode = [...code]
 		newCode[index] = value
 		setCode(newCode)
 
-		// Auto-focus next input if there's a value and we're not at the last input
 		if (value && index < 5) {
-			console.log("Moving to next input")
 			const nextInput = document.getElementById(`code-${index + 1}`)
 			if (nextInput) {
 				nextInput.focus()
@@ -83,23 +75,21 @@ const EmailVerificationPage = () => {
 	}
 
 	const handleResendCode = async () => {
-		console.log("Resend button clicked, email:", email) // Debug log
 		if (!email) {
-			console.error("No email found to resend verification code")
+			console.error(error)
 			toast.error("No email address found")
 			return
 		}
 
 		try {
-			console.log("Calling resendVerificationEmail with email:", email) // Debug log
 			const response = await resendVerificationEmail(email)
-			console.log("Resend verification response:", response) // Debug log
 			toast.success("Verification code resent successfully!")
 		} catch (error) {
-			console.error("Error resending verification code:", error) // Debug log
+			console.error(error)
 			toast.error(error.response?.data?.message || "Failed to resend code")
 		}
 	}
+
 	return (
 		<div className="fixed inset-0 overflow-hidden">
 			<div className="h-full flex items-center justify-center bg-gray-50 px-4 py-8">
@@ -125,14 +115,9 @@ const EmailVerificationPage = () => {
 													type="text"
 													maxLength="1"
 													value={code[index]}
-													onChange={e => {
-														console.log("onChange", { value: e.target.value }) // Debug log
-														handleCodeChange(index, e.target.value)
-													}}
+													onChange={e => handleCodeChange(index, e.target.value)}
 													onPaste={handlePaste}
 													onKeyDown={e => {
-														console.log("onKeyDown", { key: e.key })
-														// Handle backspace to move to previous input
 														if (e.key === "Backspace" && !e.target.value && index > 0) {
 															const prevInput = document.getElementById(`code-${index - 1}`)
 															if (prevInput) {

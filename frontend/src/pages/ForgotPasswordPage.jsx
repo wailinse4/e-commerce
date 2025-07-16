@@ -27,7 +27,7 @@ const ForgotPasswordPage = () => {
 			await forgotPassword(email)
 			setIsSubmitted(true)
 		} catch (error) {
-			console.error("Forgot password error:", error)
+			console.error(error)
 			toast.error(error.response?.data?.message || "Failed to send reset email")
 		}
 	}

@@ -1,5 +1,3 @@
-import axiosInstance from "../config/axiosInstance.js"
-
 import { createContext, useContext, useState, useEffect } from "react"
 import { signupService, loginService, checkAuthService, logoutService, verifyEmailService, resendVerificationEmailService, forgotPasswordService, resetPasswordService } from "../services/authService.js"
 
@@ -49,7 +47,7 @@ export const AuthProvider = ({ children }) => {
 			const response = await checkAuthService()
 			setUser(response.data.data)
 		} catch (error) {
-			console.error("Authentication check failed")
+			console.error(error)
 			setUser(null)
 		} finally {
 			setIsCheckingAuth(false)
@@ -75,6 +73,7 @@ export const AuthProvider = ({ children }) => {
 			const response = await verifyEmailService(verificationCode)
 			setUser(response.data.data)
 		} catch (error) {
+			console.error(error)
 			throw error
 		} finally {
 			setIsVerifyingEmail(false)
@@ -87,6 +86,7 @@ export const AuthProvider = ({ children }) => {
 			const response = await resendVerificationEmailService(email)
 			setUser(response.data.data)
 		} catch (error) {
+			console.error(error)
 			throw error
 		} finally {
 			setIsResendingVerificationEmail(false)
@@ -98,6 +98,7 @@ export const AuthProvider = ({ children }) => {
 		try {
 			await forgotPasswordService(email)
 		} catch (error) {
+			console.error(error)
 			throw error
 		} finally {
 			setIsProcessingForgotPassword(false)
@@ -109,6 +110,7 @@ export const AuthProvider = ({ children }) => {
 		try {
 			await resetPasswordService(resetPasswordToken, password)
 		} catch (error) {
+			console.error(error)
 			throw error
 		} finally {
 			setIsProcessingResetPassword(false)
