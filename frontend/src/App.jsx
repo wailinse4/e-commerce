@@ -9,6 +9,7 @@ import Navbar from "./components/layout/Navbar"
 
 import SignupPage from "./pages/SignupPage"
 import LoginPage from "./pages/LoginPage"
+import EmailVerificationPage from "./pages/EmailVerificationPage"
 
 import HomePage from "./pages/HomePage"
 
@@ -30,6 +31,7 @@ function App() {
 
           <Route path="/signup" element={<PublicRoute><SignupPage /></PublicRoute>} />
           <Route path="/login" element={<PublicRoute><LoginPage /></PublicRoute>} />
+          <Route path="/verify-email" element={<PublicRoute><EmailVerificationPage /></PublicRoute>} />
         </Routes>
       </div>
       <Toaster />
