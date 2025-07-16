@@ -25,7 +25,12 @@ export const verifyEmailService = async (verificationCode) => {
     return response
 }
 
-export const resendVerificationEmailService = async (email) => {
+export const resendVerificationEmailService = async (email) => {    
     const response = await axiosInstance.post("/auth/resend-verification-email", { email })
     return response
 }
+
+export const forgotPasswordService = async (email) => {
+    const response = await axiosInstance.post("/auth/forgot-password", { email })
+    return response
+} 
