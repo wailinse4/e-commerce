@@ -1,4 +1,4 @@
-import { signupService, loginService, checkAuthService, verifyEmailService } from "../services/authService.js"
+import { signupService, loginService, checkAuthService, verifyEmailService, resendVerificationEmailService } from "../services/authService.js"
 
 import generateToken from "../utils/generateToken.js"
 import setCookie from "../utils/setCookie.js"
@@ -83,6 +83,26 @@ export const verifyEmail = async (req, res, next) => {
         const user = await verifyEmailService(verificationCode)
 
         res.status(200).json({ success: true, message: "Email verified successfully", data: {
+            userId: user.id, 
+            fullName: user.fullName, 
+            email: user.email, 
+            
+            verificationCode: user.verificationCode, 
+            verificationCodeExpiresAt: user.verificationCodeExpiresAt, 
+            isVerified: user.isVerified, 
+        }})
+    }   
+    catch(error) {
+        next(error)
+    }
+}
+
+export const resendVerificationEmail = async (req, res, next) => {
+    try {
+        const { email } = req.body
+        const user = await resendVerificationEmailService(email)
+
+        res.status(200).json({ success: true, message: "Verification email resent successfully", data: {
             userId: user.id, 
             fullName: user.fullName, 
             email: user.email, 
