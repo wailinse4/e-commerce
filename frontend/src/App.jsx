@@ -4,6 +4,7 @@ import { useAuth } from "./context/AuthContext.jsx"
 
 import ProtectedRoute from "./components/ProtectedRoute"
 import PublicRoute from "./components/PublicRoute"
+import LoadingSpinner from "./components/ui/LoadingSpinner"
 
 import Navbar from "./components/layout/Navbar"
 
@@ -19,7 +20,11 @@ function App() {
 	const { user, isCheckingAuth } = useAuth()
 
 	if (isCheckingAuth && !user) {
-		return <div>Loading...</div>
+		return (
+			<div className="flex items-center justify-center min-h-screen">
+				<LoadingSpinner size="lg" />
+			</div>
+		)
 	}
 
 	return (

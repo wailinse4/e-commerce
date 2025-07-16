@@ -1,7 +1,8 @@
 import { useState } from "react"
 import { Link, useNavigate } from "react-router-dom"
 import { motion } from "framer-motion"
-import { UserPlus, Mail, Lock, User, ArrowRight } from "lucide-react"
+import { Mail, Lock, User, ArrowRight } from "lucide-react"
+import LoadingSpinner from "../components/ui/LoadingSpinner"
 import { toast } from "react-hot-toast"
 
 import { useAuth } from "../context/AuthContext"
@@ -117,16 +118,29 @@ const SignUpPage = () => {
 								</div>
 							</div>
 
-							<motion.button type="submit" disabled={isSigningUp} className={`w-full flex justify-center py-3 px-4 border border-transparent rounded-full shadow-sm text-sm font-medium text-white bg-black hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-black transition-colors duration-200 ${isSigningUp ? "opacity-70 cursor-not-allowed" : ""}`}>
-								{isSigningUp ? "Creating Account..." : "Create Account"}
-								<UserPlus className="mr-2 h-5 w-5" aria-hidden="true" />
-							</motion.button>
+							<button
+								type="submit"
+								disabled={isSigningUp}
+								className="w-full flex justify-center items-center py-3 px-4 border border-transparent rounded-xl shadow-sm text-sm font-medium text-white bg-black hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-black disabled:opacity-50 disabled:cursor-not-allowed transition-colors duration-200"
+							>
+								{isSigningUp ? (
+									<>
+										<LoadingSpinner size="sm" color="white" className="mr-2" />
+										Creating account...
+									</>
+								) : (
+									<>
+										Create account
+										<ArrowRight className="ml-2 h-4 w-4" />
+									</>
+								)}
+							</button>
 						</motion.form>
 
 						<p className="mt-8 text-center text-sm text-gray-600">
 							Already have an account?{" "}
-							<Link to="/login" className="font-medium text-black hover:underline">
-								Sign in <ArrowRight className="inline h-4 w-4" />
+							<Link to="/login" className="font-medium text-black hover:underline ml-1">
+								Sign in
 							</Link>
 						</p>
 					</motion.div>

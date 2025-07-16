@@ -1,7 +1,8 @@
 import { useState } from "react"
 import { motion } from "framer-motion"
 import { Link, useSearchParams } from "react-router-dom"
-import { Loader2, ArrowLeft } from "lucide-react"
+import { ArrowLeft } from "lucide-react"
+import LoadingSpinner from "../components/ui/LoadingSpinner"
 import { toast } from "react-hot-toast"
 import { useAuth } from "../context/AuthContext"
 
@@ -142,7 +143,7 @@ const EmailVerificationPage = () => {
 										<button type="button" onClick={handleResendCode} className="font-medium text-gray-900 hover:text-gray-700 transition-colors disabled:opacity-50 flex items-center gap-1.5" disabled={isVerifyingEmail || isResendingVerificationEmail}>
 											{isResendingVerificationEmail ? (
 												<>
-													<Loader2 className="w-3.5 h-3.5 animate-spin" />
+													<LoadingSpinner size="sm" />
 													Sending...
 												</>
 											) : (
@@ -152,10 +153,16 @@ const EmailVerificationPage = () => {
 									</div>
 								</div>
 
-								<motion.button whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }} type="submit" disabled={isVerifyingEmail} className="flex items-center justify-center w-full gap-2 px-4 py-3 text-sm font-medium text-white transition-colors bg-gray-900 rounded-xl shadow-sm hover:bg-gray-800 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gray-900 disabled:opacity-50 disabled:cursor-not-allowed">
+								<motion.button 
+									type="submit" 
+									disabled={isVerifyingEmail} 
+									className="flex items-center justify-center w-full gap-2 px-4 py-3 text-sm font-medium text-white transition-colors bg-gray-900 rounded-xl shadow-sm hover:bg-gray-800 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gray-900 disabled:opacity-50 disabled:cursor-not-allowed"
+									whileHover={!isVerifyingEmail ? { scale: 1.02 } : {}}
+									whileTap={!isVerifyingEmail ? { scale: 0.98 } : {}}
+								>
 									{isVerifyingEmail ? (
 										<>
-											<Loader2 className="w-4 h-4 animate-spin" />
+											<LoadingSpinner size="sm" color="white" />
 											Verifying...
 										</>
 									) : (

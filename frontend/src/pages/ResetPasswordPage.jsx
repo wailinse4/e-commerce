@@ -1,6 +1,7 @@
 import { Link, useParams } from "react-router-dom"
 import { motion } from "framer-motion"
-import { Lock, ArrowLeft, CheckCircle, Loader2 } from "lucide-react"
+import { Lock, ArrowLeft, CheckCircle } from "lucide-react"
+import LoadingSpinner from "../components/ui/LoadingSpinner"
 import { useState } from "react"
 import { useAuth } from "../context/AuthContext"
 import { toast } from "react-hot-toast"
@@ -96,7 +97,7 @@ const ResetPasswordPage = () => {
 										<button type="submit" className="w-full flex justify-center py-3 px-4 border border-transparent rounded-xl shadow-sm text-sm font-medium text-white bg-black hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-black transition-colors duration-200">
 											{isProcessingResetPassword ? (
 												<>
-													<Loader2 className="animate-spin -ml-1 mr-2 h-5 w-5 text-white" />
+													<LoadingSpinner size="md" color="white" className="-ml-1 mr-2" />
 													Resetting...
 												</>
 											) : (
