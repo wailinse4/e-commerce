@@ -1,7 +1,7 @@
 import axiosInstance from "../config/axiosInstance.js"
 
 import { createContext, useContext, useState, useEffect } from "react"
-import { signupService, loginService, checkAuthService, logoutService } from "../services/authService.js"
+import { signupService, loginService, checkAuthService, logoutService, verifyEmailService } from "../services/authService.js"
 
 export const AuthContext = createContext() 
 
@@ -11,6 +11,7 @@ export const AuthProvider = ({ children }) => {
     const [isLoggingIn, setIsLoggingIn] = useState(false)
     const [isCheckingAuth, setIsCheckingAuth] = useState(true)
     const [isLoggingOut, setIsLoggingOut] = useState(false)
+    const [isVerifyingEmail, setIsVerifyingEmail] = useState(false)
 
     const signup = async (fullName, email, password, confirmPassword) => {
         setIsSigningUp(true)
@@ -73,6 +74,20 @@ export const AuthProvider = ({ children }) => {
         }
     }
 
+    const verifyEmail = async (verificationCode) => {
+        setIsVerifyingEmail(true)
+        try {
+            const response = await verifyEmailService(verificationCode)
+            setUser(response.data.data)
+        } 
+        catch (error) {
+            throw error
+        } 
+        finally {
+            setIsVerifyingEmail(false)
+        }
+    }
+
     useEffect(() => {
         checkAuth()
     }, [])
@@ -92,7 +107,11 @@ export const AuthProvider = ({ children }) => {
             setIsCheckingAuth, 
             isLoggingOut, 
             setIsLoggingOut,
-            logout , 
+            logout, 
+            isVerifyingEmail,
+            setIsVerifyingEmail,
+            verifyEmail
+
         }}>
             { children }
         </AuthContext.Provider>

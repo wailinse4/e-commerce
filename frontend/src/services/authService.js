@@ -19,3 +19,8 @@ export const logoutService = async () => {
     const response = await axiosInstance.post("/auth/logout")
     return response
 }
+
+export const verifyEmailService = async (verificationCode) => {
+    const response = await axiosInstance.post("/auth/verify-email", { verificationCode })
+    return response
+}
