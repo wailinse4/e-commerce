@@ -136,7 +136,7 @@ export const verifyEmailService = async (verificationCode) => {
                 </div>
 
                 <div style="margin: 30px 0; text-align: center;">
-                    <a href="${process.env.CLIENT_URL || 'http://localhost:5173'}" 
+                    <a href="${process.env.FRONTEND_URL || 'http://localhost:5173'}" 
                        style="display: inline-block; padding: 12px 24px; background-color: #4299e1; 
                               color: white; text-decoration: none; border-radius: 4px; 
                               font-weight: 500;">
