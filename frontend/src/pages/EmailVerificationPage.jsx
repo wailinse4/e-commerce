@@ -1,7 +1,7 @@
 import { useState } from "react"
 import { motion } from "framer-motion"
 import { Link, useSearchParams } from "react-router-dom"
-import { ArrowLeft } from "lucide-react"
+import { ArrowLeft, Loader2 } from "lucide-react"
 import { toast } from "react-hot-toast"
 import { useAuth } from "../context/AuthContext"
 
@@ -9,7 +9,7 @@ const EmailVerificationPage = () => {
   const [code, setCode] = useState(['', '', '', '', '', ''])
   const [searchParams] = useSearchParams()
   const email = searchParams.get('email')
-  const { verifyEmail, isVerifying } = useAuth()
+  const { verifyEmail, isVerifyingEmail } = useAuth()
 
   const handlePaste = (e) => {
     e.preventDefault()
@@ -147,7 +147,7 @@ const EmailVerificationPage = () => {
                           className="w-12 h-12 text-center text-lg border border-gray-300 rounded-xl focus:outline-none focus:ring-1 focus:ring-black focus:border-black transition-colors"
                           inputMode="numeric"
                           pattern="[0-9]*"
-                          disabled={isVerifying}
+                          disabled={isVerifyingEmail}
                         />
                       </motion.div>
                     ))}
@@ -163,7 +163,7 @@ const EmailVerificationPage = () => {
                     <button 
                       type="button" 
                       className="font-medium text-gray-900 hover:text-gray-700 transition-colors disabled:opacity-50"
-                      disabled={isVerifying}
+                      disabled={isVerifyingEmail}
                     >
                       Resend code
                     </button>
@@ -174,10 +174,17 @@ const EmailVerificationPage = () => {
                   whileHover={{ scale: 1.02 }}
                   whileTap={{ scale: 0.98 }}
                   type="submit"
-                  disabled={isVerifying}
-                  className="flex w-full justify-center rounded-xl bg-gray-900 px-4 py-3 text-sm font-medium text-white shadow-sm hover:bg-gray-800 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gray-900 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                  disabled={isVerifyingEmail}
+                  className="flex items-center justify-center w-full gap-2 px-4 py-3 text-sm font-medium text-white transition-colors bg-gray-900 rounded-xl shadow-sm hover:bg-gray-800 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gray-900 disabled:opacity-50 disabled:cursor-not-allowed"
                 >
-                  {isVerifying ? 'Verifying...' : 'Verify Email'}
+                  {isVerifyingEmail ? (
+                    <>
+                      <Loader2 className="w-4 h-4 animate-spin" />
+                      Verifying...
+                    </>
+                  ) : (
+                    'Verify Email'
+                  )}
                 </motion.button>
               </form>
   
