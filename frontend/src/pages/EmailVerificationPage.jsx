@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { motion } from "framer-motion"
 import { Link, useSearchParams } from "react-router-dom"
 import { ArrowLeft, Loader2 } from "lucide-react"
@@ -8,8 +8,17 @@ import { useAuth } from "../context/AuthContext"
 const EmailVerificationPage = () => {
   const [code, setCode] = useState(['', '', '', '', '', ''])
   const [searchParams] = useSearchParams()
-  const email = searchParams.get('email')
-  const { verifyEmail, isVerifyingEmail } = useAuth()
+  const { 
+    user,
+    verifyEmail, 
+    isVerifyingEmail, 
+    isResendingVerificationEmail, 
+    resendVerificationEmail
+  } = useAuth()
+  
+  // Get email from URL or from authenticated user
+  const emailFromUrl = searchParams.get('email')
+  const email = emailFromUrl || user?.email
 
   const handlePaste = (e) => {
     e.preventDefault()
@@ -76,6 +85,25 @@ const EmailVerificationPage = () => {
       toast.success('Email verified successfully!')
     } catch (error) {
       toast.error(error.response?.data?.message || 'Verification failed')
+    }
+  }
+
+  const handleResendCode = async () => {
+    console.log('Resend button clicked, email:', email) // Debug log
+    if (!email) {
+      console.error('No email found to resend verification code')
+      toast.error('No email address found')
+      return
+    }
+    
+    try {
+      console.log('Calling resendVerificationEmail with email:', email) // Debug log
+      const response = await resendVerificationEmail(email)
+      console.log('Resend verification response:', response) // Debug log
+      toast.success('Verification code resent successfully!')
+    } catch (error) {
+      console.error('Error resending verification code:', error) // Debug log
+      toast.error(error.response?.data?.message || 'Failed to resend code')
     }
   }
   return (
@@ -162,10 +190,18 @@ const EmailVerificationPage = () => {
                     <span>Didn't receive a code?</span>
                     <button 
                       type="button" 
-                      className="font-medium text-gray-900 hover:text-gray-700 transition-colors disabled:opacity-50"
-                      disabled={isVerifyingEmail}
+                      onClick={handleResendCode}
+                      className="font-medium text-gray-900 hover:text-gray-700 transition-colors disabled:opacity-50 flex items-center gap-1.5"
+                      disabled={isVerifyingEmail || isResendingVerificationEmail}
                     >
-                      Resend code
+                      {isResendingVerificationEmail ? (
+                        <>
+                          <Loader2 className="w-3.5 h-3.5 animate-spin" />
+                          Sending...
+                        </>
+                      ) : (
+                        'Resend code'
+                      )}
                     </button>
                   </div>
                 </div>
