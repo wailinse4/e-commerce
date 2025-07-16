@@ -1,7 +1,9 @@
-import { signupService, loginService, checkAuthService, verifyEmailService, resendVerificationEmailService } from "../services/authService.js"
+import { signupService, loginService, checkAuthService, verifyEmailService, resendVerificationEmailService, forgotPasswordService } from "../services/authService.js"
 
 import generateToken from "../utils/generateToken.js"
 import setCookie from "../utils/setCookie.js"
+
+import crypto from "crypto"
 
 export const signup = async (req, res, next) => {
     try {
@@ -112,6 +114,19 @@ export const resendVerificationEmail = async (req, res, next) => {
             isVerified: user.isVerified, 
         }})
     }   
+    catch(error) {
+        next(error)
+    }
+}
+
+
+export const forgotPassword = async (req, res, next) => {
+    try {
+        const { email } = req.body 
+        await forgotPasswordService(email)
+
+        res.status(200).json({ success: true, message: "Password reset link sent to your email" })
+    }
     catch(error) {
         next(error)
     }
