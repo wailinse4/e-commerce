@@ -1,7 +1,7 @@
 import axiosInstance from "../config/axiosInstance.js"
 
 import { createContext, useContext, useState, useEffect } from "react"
-import { signupService, loginService, checkAuthService, logoutService, verifyEmailService } from "../services/authService.js"
+import { signupService, loginService, checkAuthService, logoutService, verifyEmailService, resendVerificationEmailService } from "../services/authService.js"
 
 export const AuthContext = createContext() 
 
@@ -12,6 +12,7 @@ export const AuthProvider = ({ children }) => {
     const [isCheckingAuth, setIsCheckingAuth] = useState(true)
     const [isLoggingOut, setIsLoggingOut] = useState(false)
     const [isVerifyingEmail, setIsVerifyingEmail] = useState(false)
+    const [isResendingVerificationEmail, setIsResendingVerificationEmail] = useState(false)
 
     const signup = async (fullName, email, password, confirmPassword) => {
         setIsSigningUp(true)
@@ -88,6 +89,20 @@ export const AuthProvider = ({ children }) => {
         }
     }
 
+    const resendVerificationEmail = async (email) => {
+        setIsResendingVerificationEmail(true)
+        try {
+            const response = await resendVerificationEmailService(email)
+            setUser(response.data.data)
+        } 
+        catch (error) {
+            throw error
+        } 
+        finally {
+            setIsResendingVerificationEmail(false)
+        }
+    }
+
     useEffect(() => {
         checkAuth()
     }, [])
@@ -110,8 +125,10 @@ export const AuthProvider = ({ children }) => {
             logout, 
             isVerifyingEmail,
             setIsVerifyingEmail,
-            verifyEmail
-
+            verifyEmail, 
+            isResendingVerificationEmail,
+            setIsResendingVerificationEmail,
+            resendVerificationEmail
         }}>
             { children }
         </AuthContext.Provider>
