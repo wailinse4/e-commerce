@@ -51,7 +51,7 @@ const Navbar = () => {
 									<Lock size={20} />
 								</IconWrapper>
 
-								<IconWrapper to={"/logout"} onClick={handleLogout}>
+								<IconWrapper to={"/"} onClick={handleLogout}>
 									<LogOut size={20} />
 								</IconWrapper>
 							</>
