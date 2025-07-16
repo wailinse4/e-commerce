@@ -1,6 +1,6 @@
 import express from "express"
 
-import { signup, login, checkAuth, logout, verifyEmail, resendVerificationEmail, forgotPassword } from "../controllers/authController.js"
+import { signup, login, checkAuth, logout, verifyEmail, resendVerificationEmail, forgotPassword, resetPassword } from "../controllers/authController.js"
 
 import authenticate from "../middleware/authenticate.js"
 
@@ -13,5 +13,6 @@ router.post("/logout", logout)
 router.post("/verify-email", verifyEmail)
 router.post("/resend-verification-email", resendVerificationEmail)
 router.post("/forgot-password", forgotPassword)
+router.post("/reset-password", resetPassword)
 
 export default router 
