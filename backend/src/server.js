@@ -6,8 +6,11 @@ import cors from "cors"
 import cookieParser from "cookie-parser"
 
 import connectDB from "./config/db.js"
+import errorHandler from "./middleware/errorHandler.js"
 
 import authRoutes from "./routes/authRoutes.js"
+
+
 
 dotenv.config()
 
@@ -29,6 +32,8 @@ app.use(express.urlencoded({ limit: "50mb", extended: true }))
 app.use(cookieParser())
 
 app.use("/api/auth", authRoutes)
+
+app.use(errorHandler)
 
 await connectDB()
 
