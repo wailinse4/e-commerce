@@ -11,8 +11,34 @@ const EmailVerificationPage = () => {
   const email = searchParams.get('email')
   const { verifyEmail, isVerifying } = useAuth()
 
+  const handlePaste = (e) => {
+    e.preventDefault()
+    const pasteData = e.clipboardData.getData('text/plain').trim()
+    
+    // Only process if pasted data is a 6-digit number
+    if (/^\d{6}$/.test(pasteData)) {
+      const pastedCode = pasteData.split('')
+      const newCode = [...code]
+      
+      // Update the code array with pasted digits
+      for (let i = 0; i < 6; i++) {
+        newCode[i] = pastedCode[i] || ''
+      }
+      
+      setCode(newCode)
+      
+      // Focus on the last input
+      const lastInput = document.getElementById('code-5')
+      if (lastInput) {
+        lastInput.focus()
+      }
+    } else {
+      toast.error('Please paste a valid 6-digit code')
+    }
+  }
+
   const handleCodeChange = (index, value) => {
-    console.log('handleCodeChange', { index, value }) // Debug log
+    console.log('handleCodeChange', { index, value })
     
     // Only allow numbers
     if (value && !/^\d*$/.test(value)) {
@@ -105,8 +131,9 @@ const EmailVerificationPage = () => {
                             console.log('onChange', { value: e.target.value }) // Debug log
                             handleCodeChange(index, e.target.value)
                           }}
+                          onPaste={handlePaste}
                           onKeyDown={(e) => {
-                            console.log('onKeyDown', { key: e.key }) // Debug log
+                            console.log('onKeyDown', { key: e.key })
                             // Handle backspace to move to previous input
                             if (e.key === 'Backspace' && !e.target.value && index > 0) {
                               const prevInput = document.getElementById(`code-${index - 1}`)
