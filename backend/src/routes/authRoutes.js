@@ -4,7 +4,7 @@ import { signup, login, checkAuth, logout, verifyEmail, resendVerificationEmail,
 
 import authenticate from "../middleware/authenticate.js"
 
-const router = express.Router() 
+const router = express.Router()
 
 router.post("/signup", signup)
 router.post("/login", login)
@@ -15,4 +15,4 @@ router.post("/resend-verification-email", resendVerificationEmail)
 router.post("/forgot-password", forgotPassword)
 router.post("/reset-password/:resetPasswordToken", resetPassword)
 
-export default router 
+export default router
