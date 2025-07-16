@@ -155,3 +155,38 @@ export const verifyEmailService = async (verificationCode) => {
 
     return user 
 }
+
+export const resendVerificationEmailService = async (email) => {
+    const user = await User.findOne({ email })
+    if(!user) {
+        throw new Error("User not found")
+    }
+
+    const verificationCode = Math.floor(10000 + Math.random() * 900000).toString()  
+    const verificationCodeExpiresAt = Date.now() + 24 * 60 * 60 * 1000  
+
+    user.verificationCode = verificationCode 
+    user.verificationCodeExpiresAt = verificationCodeExpiresAt 
+    await user.save() 
+
+    await transporter.sendMail({
+        to: user.email, 
+        subject: "Email Verification Code",
+        html: `
+            <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
+                <h2>Your Verification Code</h2>
+                <p>Hello ${user.fullName || 'there'},</p>
+                <p>Please use the following code to verify your email address:</p>
+                <h3 style="background: #f4f4f4; padding: 10px; display: inline-block; border-radius: 5px;">
+                    ${verificationCode}
+                </h3>
+                <p>This code will expire in 1 hour.</p>
+                <p>If you didn't request this code, please ignore this email.</p>
+                <br/>
+                <p>Best regards,<br/>The Team</p>
+            </div>
+        `
+    }) 
+
+    return user 
+}
