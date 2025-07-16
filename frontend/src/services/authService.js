@@ -24,3 +24,8 @@ export const verifyEmailService = async (verificationCode) => {
     const response = await axiosInstance.post("/auth/verify-email", { verificationCode })
     return response
 }
+
+export const resendVerificationEmailService = async (email) => {
+    const response = await axiosInstance.post("/auth/resend-verification-email", { email })
+    return response
+}
