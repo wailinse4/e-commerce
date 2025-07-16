@@ -1,4 +1,4 @@
-import { signupService, loginService, checkAuthService, verifyEmailService, resendVerificationEmailService, forgotPasswordService } from "../services/authService.js"
+import { signupService, loginService, checkAuthService, verifyEmailService, resendVerificationEmailService, forgotPasswordService, resetPasswordService } from "../services/authService.js"
 
 import generateToken from "../utils/generateToken.js"
 import setCookie from "../utils/setCookie.js"
@@ -126,6 +126,19 @@ export const forgotPassword = async (req, res, next) => {
         await forgotPasswordService(email)
 
         res.status(200).json({ success: true, message: "Password reset link sent to your email" })
+    }
+    catch(error) {
+        next(error)
+    }
+}
+
+export const resetPassword = async (req, res, next) => {
+    try {
+        const { resetPasswordToken } = req.params 
+        const { password } = req.body 
+        await resetPasswordService(resetPasswordToken, password)
+
+        res.status(200).json({ success: true, message: "Password reset successfully" })
     }
     catch(error) {
         next(error)
