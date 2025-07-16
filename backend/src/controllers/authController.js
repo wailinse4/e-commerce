@@ -1,4 +1,4 @@
-import { signupService, loginService, checkAuthService } from "../services/authService.js"
+import { signupService, loginService, checkAuthService, verifyEmailService } from "../services/authService.js"
 
 import generateToken from "../utils/generateToken.js"
 import setCookie from "../utils/setCookie.js"
@@ -9,7 +9,7 @@ export const signup = async (req, res, next) => {
         const user = await signupService({ fullName, email, password, confirmPassword })
         const token = generateToken(user)
         setCookie(res, token)
-
+        
         return res.status(201).json({ success: true, message: "Signup successful", data: {
             userId: user.id, 
             fullName: user.fullName, 
@@ -70,6 +70,26 @@ export const logout = (req, res) => {
 
         res.status(200).json({ success: true, message: "Logout successful" })
     }
+    catch(error) {
+        next(error)
+    }
+}
+
+export const verifyEmail = async (req, res, next) => {
+    try {
+        const { verificationCode } = req.body
+        const user = await verifyEmailService(verificationCode)
+
+        res.status(200).json({ success: true, message: "Email verified successfully", data: {
+            userId: user.id, 
+            fullName: user.fullName, 
+            email: user.email, 
+            
+            verificationCode: user.verificationCode, 
+            verificationCodeExpiresAt: user.verificationCodeExpiresAt, 
+            isVerified: user.isVerified, 
+        }})
+    }   
     catch(error) {
         next(error)
     }
