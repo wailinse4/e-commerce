@@ -1,6 +1,7 @@
 import axiosInstance from "../config/axiosInstance.js"
 
 import { createContext, useContext, useState, useEffect } from "react"
+import { signupService, loginService, checkAuthService, logoutService } from "../services/authService.js"
 
 export const AuthContext = createContext() 
 
@@ -14,7 +15,7 @@ export const AuthProvider = ({ children }) => {
     const signup = async (fullName, email, password, confirmPassword) => {
         setIsSigningUp(true)
         try {
-            const response = await axiosInstance.post("/auth/signup", { fullName, email, password, confirmPassword })
+            const response = await signupService(fullName, email, password, confirmPassword)
             setUser(response.data.data)
         } 
         catch (error) {
@@ -30,7 +31,7 @@ export const AuthProvider = ({ children }) => {
     const login = async (email, password) => {
         setIsLoggingIn(true)
         try {
-            const response = await axiosInstance.post("/auth/login", { email, password })
+            const response = await loginService(email, password)
             setUser(response.data.data)
         } 
         catch (error) {
@@ -45,7 +46,7 @@ export const AuthProvider = ({ children }) => {
 
     const checkAuth = async () => {
         try {
-            const response = await axiosInstance.get('/auth/check-auth')
+            const response = await checkAuthService()
             setUser(response.data.data)
         } 
         catch (error) {
@@ -60,7 +61,7 @@ export const AuthProvider = ({ children }) => {
     const logout = async () => {
         setIsLoggingOut(true)
         try {
-            await axiosInstance.post("/auth/logout")
+            await logoutService()
             setUser(null)
         }
         catch(error) {
