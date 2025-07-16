@@ -10,6 +10,7 @@ import Navbar from "./components/layout/Navbar"
 import SignupPage from "./pages/SignupPage"
 import LoginPage from "./pages/LoginPage"
 import EmailVerificationPage from "./pages/EmailVerificationPage"
+import ForgotPasswordPage from "./pages/ForgotPasswordPage"
 
 import HomePage from "./pages/HomePage"
 
@@ -32,6 +33,7 @@ function App() {
           <Route path="/signup" element={<PublicRoute><SignupPage /></PublicRoute>} />
           <Route path="/login" element={<PublicRoute><LoginPage /></PublicRoute>} />
           <Route path="/verify-email" element={<PublicRoute><EmailVerificationPage /></PublicRoute>} />
+          <Route path="/forgot-password" element={<PublicRoute><ForgotPasswordPage /></PublicRoute>} />
         </Routes>
       </div>
       <Toaster />
