@@ -1,6 +1,6 @@
 import { Route, Routes } from "react-router-dom"
 import { Toaster } from "react-hot-toast"
-import { useAuth } from "./context/AuthContext.jsx" 
+import { useAuth } from "./context/AuthContext.jsx"
 
 import ProtectedRoute from "./components/ProtectedRoute"
 import PublicRoute from "./components/PublicRoute"
@@ -15,32 +15,72 @@ import ResetPasswordPage from "./pages/ResetPasswordPage"
 
 import HomePage from "./pages/HomePage"
 
-
-
 function App() {
-  const { user, isCheckingAuth } = useAuth()
+	const { user, isCheckingAuth } = useAuth()
 
-  if (isCheckingAuth && !user) {
-    return <div>Loading...</div>
-  }
+	if (isCheckingAuth && !user) {
+		return <div>Loading...</div>
+	}
 
-  return (
-    <div className="min-h-screen bg-gray-50 text-gray-900 relative overflow-hidden">
-      <div className="relative z-50 pt-20">
-        <Navbar />
-        <Routes>
-          <Route path="/" element={<ProtectedRoute><HomePage /></ProtectedRoute>} />
+	return (
+		<div className="min-h-screen bg-gray-50 text-gray-900 relative overflow-hidden">
+			<div className="relative z-50 pt-20">
+				<Navbar />
+				<Routes>
+					<Route
+						path="/"
+						element={
+							<ProtectedRoute>
+								<HomePage />
+							</ProtectedRoute>
+						}
+					/>
 
-          <Route path="/signup" element={<PublicRoute><SignupPage /></PublicRoute>} />
-          <Route path="/login" element={<PublicRoute><LoginPage /></PublicRoute>} />
-          <Route path="/verify-email" element={<PublicRoute><EmailVerificationPage /></PublicRoute>} />
-          <Route path="/forgot-password" element={<PublicRoute><ForgotPasswordPage /></PublicRoute>} />
-          <Route path="/reset-password/:resetPasswordToken" element={<PublicRoute><ResetPasswordPage /></PublicRoute>} />
-        </Routes>
-      </div>
-      <Toaster />
-    </div>
-  )
+					<Route
+						path="/signup"
+						element={
+							<PublicRoute>
+								<SignupPage />
+							</PublicRoute>
+						}
+					/>
+					<Route
+						path="/login"
+						element={
+							<PublicRoute>
+								<LoginPage />
+							</PublicRoute>
+						}
+					/>
+					<Route
+						path="/verify-email"
+						element={
+							<PublicRoute>
+								<EmailVerificationPage />
+							</PublicRoute>
+						}
+					/>
+					<Route
+						path="/forgot-password"
+						element={
+							<PublicRoute>
+								<ForgotPasswordPage />
+							</PublicRoute>
+						}
+					/>
+					<Route
+						path="/reset-password/:resetPasswordToken"
+						element={
+							<PublicRoute>
+								<ResetPasswordPage />
+							</PublicRoute>
+						}
+					/>
+				</Routes>
+			</div>
+			<Toaster />
+		</div>
+	)
 }
 
 export default App
