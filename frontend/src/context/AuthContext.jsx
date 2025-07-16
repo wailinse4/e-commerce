@@ -1,7 +1,7 @@
 import axiosInstance from "../config/axiosInstance.js"
 
 import { createContext, useContext, useState, useEffect } from "react"
-import { signupService, loginService, checkAuthService, logoutService, verifyEmailService, resendVerificationEmailService } from "../services/authService.js"
+import { signupService, loginService, checkAuthService, logoutService, verifyEmailService, resendVerificationEmailService, forgotPasswordService } from "../services/authService.js"
 
 export const AuthContext = createContext() 
 
@@ -13,6 +13,7 @@ export const AuthProvider = ({ children }) => {
     const [isLoggingOut, setIsLoggingOut] = useState(false)
     const [isVerifyingEmail, setIsVerifyingEmail] = useState(false)
     const [isResendingVerificationEmail, setIsResendingVerificationEmail] = useState(false)
+    const [isProcessingForgotPassword, setIsProcessingForgotPassword] = useState(false)
 
     const signup = async (fullName, email, password, confirmPassword) => {
         setIsSigningUp(true)
@@ -103,6 +104,19 @@ export const AuthProvider = ({ children }) => {
         }
     }
 
+    const forgotPassword = async (email) => {
+        setIsProcessingForgotPassword(true)
+        try {
+            forgotPasswordService(email)
+        }
+        catch(error) {
+            throw error 
+        }
+        finally {
+            setIsProcessingForgotPassword(false)
+        }
+    }
+
     useEffect(() => {
         checkAuth()
     }, [])
@@ -128,7 +142,10 @@ export const AuthProvider = ({ children }) => {
             verifyEmail, 
             isResendingVerificationEmail,
             setIsResendingVerificationEmail,
-            resendVerificationEmail
+            resendVerificationEmail, 
+            isProcessingForgotPassword,
+            setIsProcessingForgotPassword,
+            forgotPassword
         }}>
             { children }
         </AuthContext.Provider>
