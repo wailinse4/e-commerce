@@ -228,3 +228,37 @@ export const forgotPasswordService = async (email) => {
         `
     })
 }
+
+export const resetPasswordService = async (resetPasswordToken, password) => {
+    const user = await User.findOne({ resetPasswordToken: resetPasswordToken, resetPasswordTokenExpiresAt: { $gt: Date.now() }})
+    if(!user) {
+        throw new Error("Invalid or expired password reset token")
+    }
+
+    if(!password) {
+        throw new Error("Passowrd is required")
+    }
+
+    const salt = await bcrypt.genSalt(12)
+    const hashedPassword = await bcrypt.hash(password, salt)
+
+    user.password = hashedPassword 
+    user.resetPasswordToken = undefined 
+    user.resetPasswordTokenExpiresAt = undefined 
+    await user.save()
+
+    await transporter.sendMail({
+        to: user.email,
+        subject: 'Password Reset Successful',
+        html: `
+            <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
+                <h2>Password Reset Successful</h2>
+                <p>Hello ${user.fullName || 'there'},</p>
+                <p>Your password has been successfully reset.</p>
+                <p>If you didn't make this change, please contact us immediately.</p>
+                <br/>
+                <p>Best regards,<br/>The Team</p>
+            </div>
+        `
+    })
+}
