@@ -11,6 +11,7 @@ import SignupPage from "./pages/SignupPage"
 import LoginPage from "./pages/LoginPage"
 import EmailVerificationPage from "./pages/EmailVerificationPage"
 import ForgotPasswordPage from "./pages/ForgotPasswordPage"
+import ResetPasswordPage from "./pages/ResetPasswordPage"
 
 import HomePage from "./pages/HomePage"
 
@@ -34,6 +35,7 @@ function App() {
           <Route path="/login" element={<PublicRoute><LoginPage /></PublicRoute>} />
           <Route path="/verify-email" element={<PublicRoute><EmailVerificationPage /></PublicRoute>} />
           <Route path="/forgot-password" element={<PublicRoute><ForgotPasswordPage /></PublicRoute>} />
+          <Route path="/reset-password/:resetPasswordToken" element={<PublicRoute><ResetPasswordPage /></PublicRoute>} />
         </Routes>
       </div>
       <Toaster />
