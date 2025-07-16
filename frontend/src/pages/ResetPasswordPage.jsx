@@ -1,10 +1,45 @@
-import { Link } from "react-router-dom";
-import { motion } from "framer-motion";
-import { Lock, ArrowLeft, CheckCircle } from "lucide-react";
+import { Link, useParams } from "react-router-dom"
+import { motion } from "framer-motion"
+import { Lock, ArrowLeft, CheckCircle, Loader2 } from "lucide-react"
+import { useState } from "react"
+import { useAuth } from "../context/AuthContext"
+import { toast } from "react-hot-toast"
 
 const ResetPasswordPage = () => {
-  // Form submission handled by parent component
+  const { resetPasswordToken } = useParams()
+  const { resetPassword, isProcessingResetPassword } = useAuth()
 
+  const [password, setPassword] = useState('')
+  const [confirmPassword, setConfirmPassword] = useState('')
+  const [isSubmitted, setIsSubmitted] = useState(false)
+
+  const handleSubmit = async (e) => {
+    e.preventDefault()
+    
+    if (!password) {
+      toast.error('Password is required')
+      return
+    }
+    
+    if (password.length < 6) {
+      toast.error('Password must be at least 6 characters')
+      return
+    }
+    
+    if (password !== confirmPassword) {
+      toast.error('Passwords do not match')
+      return
+    }
+    
+    try {
+      await resetPassword(resetPasswordToken, password)
+      setIsSubmitted(true)
+      toast.success('Password has been reset successfully!')
+    } catch (error) {
+      console.error('Reset password error:', error)
+      toast.error(error.response?.data?.message || 'Failed to reset password')
+    }
+  }
   return (
     <div className="fixed inset-0 overflow-hidden">
       <div className="h-full flex items-center justify-center bg-gray-50 px-4 py-8">
@@ -15,6 +50,15 @@ const ResetPasswordPage = () => {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5 }}
           >
+            {!isSubmitted && (
+              <Link 
+                to="/login" 
+                className="inline-flex items-center text-sm text-gray-600 hover:text-black mb-6 transition-colors duration-200"
+              >
+                <ArrowLeft className="h-4 w-4 mr-1" />
+                Back to login
+              </Link>
+            )}
             <div className="text-center mb-8">
               <motion.div 
                 className="mx-auto flex items-center justify-center h-12 w-12 rounded-full bg-gray-100 mb-4"
@@ -47,7 +91,8 @@ const ResetPasswordPage = () => {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.4, duration: 0.5 }}
               >
-                <form className="space-y-6">
+                {!isSubmitted ? (
+                  <form onSubmit={handleSubmit} className="space-y-6">
                   <div className="space-y-4">
                     <div>
                       <label htmlFor="password" className="block text-sm font-medium text-gray-700 mb-1">
@@ -61,10 +106,11 @@ const ResetPasswordPage = () => {
                           id="password"
                           name="password"
                           type="password"
-                          required
-                          minLength="6"
+                          value={password}
+                          onChange={(e) => setPassword(e.target.value)}
                           className="appearance-none block w-full pl-10 pr-3 py-2 border border-gray-300 rounded-lg shadow-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-black focus:border-black sm:text-sm transition-colors duration-200"
                           placeholder="Enter new password"
+                          disabled={isProcessingResetPassword}
                         />
                       </div>
                     </div>
@@ -81,10 +127,11 @@ const ResetPasswordPage = () => {
                           id="confirmPassword"
                           name="confirmPassword"
                           type="password"
-                          required
-                          minLength="6"
+                          value={confirmPassword}
+                          onChange={(e) => setConfirmPassword(e.target.value)}
                           className="appearance-none block w-full pl-10 pr-3 py-2 border border-gray-300 rounded-lg shadow-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-black focus:border-black sm:text-sm transition-colors duration-200"
                           placeholder="Confirm new password"
+                          disabled={isProcessingResetPassword}
                         />
                       </div>
                     </div>
@@ -100,10 +147,47 @@ const ResetPasswordPage = () => {
                       type="submit"
                       className="w-full flex justify-center py-3 px-4 border border-transparent rounded-xl shadow-sm text-sm font-medium text-white bg-black hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-black transition-colors duration-200"
                     >
-                      Reset Password
+                      {isProcessingResetPassword ? (
+                        <>
+                          <Loader2 className="animate-spin -ml-1 mr-2 h-5 w-5 text-white" />
+                          Resetting...
+                        </>
+                      ) : (
+                        'Reset Password'
+                      )}
                     </button>
                   </motion.div>
                 </form>
+              ) : (
+                <motion.div 
+                  className="text-center py-4"
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.5 }}
+                >
+                  <div className="mx-auto flex items-center justify-center h-12 w-12 rounded-full bg-green-100">
+                    <CheckCircle className="h-6 w-6 text-green-600" />
+                  </div>
+                  <h3 className="mt-4 text-lg font-medium text-gray-900">Password Reset Successful</h3>
+                  <p className="mt-2 text-sm text-gray-500">
+                    Your password has been updated successfully. You can now log in with your new password.
+                  </p>
+                  <motion.div 
+                    className="mt-6"
+                    initial={{ opacity: 0, y: 10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 0.2, duration: 0.3 }}
+                  >
+                    <Link 
+                      to="/login" 
+                      className="inline-flex items-center justify-center px-4 py-2 border border-transparent text-sm font-medium rounded-lg shadow-sm text-white bg-black hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-black transition-colors duration-200"
+                    >
+                      Continue to Login
+                      <ArrowLeft className="h-4 w-4 ml-2 transform rotate-180" />
+                    </Link>
+                  </motion.div>
+                </motion.div>
+              )}
               </motion.div>
           </motion.div>
         </div>
