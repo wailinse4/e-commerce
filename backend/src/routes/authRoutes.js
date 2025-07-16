@@ -13,6 +13,6 @@ router.post("/logout", logout)
 router.post("/verify-email", verifyEmail)
 router.post("/resend-verification-email", resendVerificationEmail)
 router.post("/forgot-password", forgotPassword)
-router.post("/reset-password", resetPassword)
+router.post("/reset-password/:resetPasswordToken", resetPassword)
 
 export default router 
