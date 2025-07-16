@@ -1,7 +1,7 @@
 import bcrypt from "bcrypt"
 import User from "../models/User.js"
-
 import transporter from "../config/nodemailer.js"
+import crypto from "crypto"
 
 export const signupService = async ({ fullName, email, password, confirmPassword }) => {
     if (!fullName || !email || !password || !confirmPassword) {
@@ -189,4 +189,42 @@ export const resendVerificationEmailService = async (email) => {
     }) 
 
     return user 
+}
+
+export const forgotPasswordService = async (email) => {
+    const user = await User.findOne({ email })
+    if(!user) {
+        throw new Error("Email does not exist")
+    }
+
+    const resetPasswordToken = crypto.randomBytes(20).toString("hex")
+    const resetPasswordTokenExpiresAt = Date.now() + 1 * 60 * 60 * 1000
+
+    user.resetPasswordToken = resetPasswordToken
+    user.resetPasswordTokenExpiresAt = resetPasswordTokenExpiresAt
+    await user.save() 
+
+    const resetPasswordUrl = `${process.env.FRONTEND_URL || "http://localhost:5173"}/reset-password/${resetPasswordToken}`
+
+    await transporter.sendMail({
+        to: user.email,
+        subject: 'Password Reset Request',
+        html: `
+            <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
+                <h2>Password Reset Request</h2>
+                <p>Hello ${user.fullName || 'there'},</p>
+                <p>You requested a password reset. Click the link below to set a new password:</p>
+                <a href="${resetPasswordUrl}" 
+                   style="display: inline-block; padding: 10px 20px; background: #4CAF50; color: white; text-decoration: none; border-radius: 5px; margin: 10px 0;">
+                    Reset Password
+                </a>
+                <p>Or copy and paste this link into your browser:</p>
+                <p>${resetPasswordUrl}</p>
+                <p>This link will expire in 1 hour.</p>
+                <p>If you didn't request this, please ignore this email.</p>
+                <br/>
+                <p>Best regards,<br/>The Team</p>
+            </div>
+        `
+    })
 }
