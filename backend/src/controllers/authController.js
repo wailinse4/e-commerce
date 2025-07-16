@@ -36,6 +36,7 @@ export const login = async (req, res, next) => {
             userId: user.id, 
             fullName: user.fullName, 
             email: user.email, 
+            isVerified: user.isVerified
         }})
     }
     catch(error) {
@@ -51,7 +52,8 @@ export const checkAuth = async (req, res, next) => {
         res.status(200).json({ success: true, message: "Authentication successful", data: {
             userId: user.id, 
             fullName: user.fullName, 
-            email: user.email, 
+            email: user.email,
+            isVerified: user.isVerified
         }})
     }   
     catch(error) {
