@@ -104,7 +104,7 @@ const LoginPage = () => {
 						<p className="mt-8 text-center text-sm text-gray-600">
 							Not a member?{" "}
 							<Link to="/signup" className="font-medium text-black hover:text-gray-700">
-								Sign up now <ArrowRight className="inline h-4 w-4" />
+								Sign up
 							</Link>
 						</p>
 					</motion.div>
