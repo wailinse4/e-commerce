@@ -3,7 +3,7 @@ import Carousel from '../Carousel';
 import ProductCard from '../common/ProductCard';
 
 const FeaturedSection = ({ products }) => (
-  <section className="py-12 bg-white">
+  <section className="py-12 bg-gray-50">
     <div className="container mx-auto px-4">
       <Carousel 
         title="Featured"

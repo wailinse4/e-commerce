@@ -3,7 +3,7 @@ import Carousel from '../Carousel';
 import ProductCard from '../common/ProductCard';
 
 const NewArrivalsSection = ({ products }) => (
-  <section className="py-12 bg-gray-50">
+  <section className="py-12 bg-white">
     <div className="container mx-auto px-4">
       <Carousel 
         title="New Arrivals"
