@@ -32,7 +32,7 @@ const LoginPage = () => {
 		try {
 			await login(email, password)
 			toast.success("Login successful!")
-			navigate("/")
+			navigate("/verify-email")
 		} catch (error) {
 			toast.error("Login failed")
 			console.error(error)

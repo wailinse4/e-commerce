@@ -53,7 +53,7 @@ const SignUpPage = () => {
 		try {
 			await signup(fullName.trim(), email, password, confirmPassword)
 			toast.success("Signup successful!")
-			navigate("/")
+			navigate("/verify-email")
 		} catch (error) {
 			toast.error("Signup failed")
 			console.error(error)
