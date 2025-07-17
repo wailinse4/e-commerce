@@ -5,8 +5,8 @@
 	"scripts": {
 		"start": "node src/server.js",
 		"dev": "nodemon src/server.js",
-		"format": "prettier --write \"**/*.{js,jsx,json,md}\"",
-		"format:check": "prettier --check \"**/*.{js,jsx,json,md}\""
+		"format": "prettier --write \"src/**/*.{js,jsx,ts,tsx,json,css,scss,md}\"",
+    	"format:check": "prettier --check \"src/**/*.{js,jsx,ts,tsx,json,css,scss,md}\"" 
 	},
 	"type": "module",
 	"keywords": [],
